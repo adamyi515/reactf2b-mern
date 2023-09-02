@@ -2,11 +2,7 @@ import express from 'express';
 const router = express.Router();
 
 // Controller ///////////////////////////////
-import { getUsers, loginUser, registerUser } from '../controllers/userController.js';
-
-
-router.route('/')
-    .get(getUsers);
+import { loginUser, registerUser } from '../controllers/userController.js';
 
 
 router.route('/login')
