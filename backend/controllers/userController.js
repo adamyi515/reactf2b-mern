@@ -9,7 +9,26 @@ const getUsers = (req, res) => {
     })
 }
 
+const loginUser = (req, res) => {
+    res.status(200).json({
+        status: 'success',
+        data: {
+            user: 'test'
+        }
+    })
+}
+
+const registerUser = (req, res) => {
+    res.status(200).json({
+        status: 'success',
+        data: {
+            user: 'test'
+        }
+    })
+}
 
 export {
-    getUsers
+    getUsers,
+    loginUser,
+    registerUser
 };
