@@ -1,0 +1,11 @@
+{
+  "name": "desktop-support",
+  "version": "1.0.0",
+  "description": "MERN stack project from React from to back.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Adam Yi",
+  "license": "ISC"
+}
