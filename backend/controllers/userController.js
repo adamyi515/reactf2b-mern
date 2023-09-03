@@ -1,20 +1,37 @@
 import bcryptjs from 'bcryptjs';
 import asyncHandler from 'express-async-handler';
+import jwt from 'jsonwebtoken';
 
 // Models //////////////////////////////
 import User from '../models/userModel.js';
 
-///////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Routes 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // @desc    Login a user
 // @route   /api/v1/users/login
 // @access  PUBLIC
 const loginUser = asyncHandler(async (req, res) => {
-    res.status(200).json({
-        status: 'success',
-        data: {
-            user: 'test'
-        }
-    })
+    const { email, password } = req.body;
+    const foundUser = await User.findOne({ email });
+
+    // If found then move to the next logic.
+    if(foundUser && await bcryptjs.compare(password, foundUser.password)){
+        // If the user is found, now compare the password is correct.
+        res.status(200).json({
+            status: 'success',
+            user: {
+                _id: foundUser._id,
+                name: foundUser.name,
+                email: foundUser.email
+            },
+            token: generateToken(foundUser._id)
+        })
+    } else {
+        res.status(401);
+        throw new Error('Invalid credentails')
+    }
+   
 })
 
 
@@ -51,14 +68,25 @@ const registerUser = asyncHandler(async (req, res) => {
     if(newUser){
         res.status(201).json({
             status: 'success',
-            user: newUser
+            user: newUser,
+            token: generateToken(newUser._id)
         })
     } else {
         res.status(400);
         throw new Error('Invalid user data')
     }
 
-})
+});
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Functions 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+const generateToken = id => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: '30d'
+    })
+}
+
 
 export {
     loginUser,
