@@ -14,7 +14,7 @@ import User from '../models/userModel.js';
 const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     const foundUser = await User.findOne({ email });
-
+    
     // If found then move to the next logic.
     if(foundUser && await bcryptjs.compare(password, foundUser.password)){
         // If the user is found, now compare the password is correct.
